@@ -4,7 +4,7 @@ namespace TripServiceKata
 {
     public class User
     {
-        private readonly List<Trip.Trip> _trips = new List<Trip.Trip>();
+        private readonly List<Trip> _trips = new List<Trip>();
         private readonly List<User> _friends = new List<User>();
 
         public List<User> GetFriends()
@@ -17,12 +17,12 @@ namespace TripServiceKata
             _friends.Add(user);
         }
 
-        public void AddTrip(Trip.Trip trip)
+        public void AddTrip(Trip trip)
         {
             _trips.Add(trip);
         }
 
-        public List<Trip.Trip> Trips()
+        public List<Trip> Trips()
         {
             return _trips;
         } 

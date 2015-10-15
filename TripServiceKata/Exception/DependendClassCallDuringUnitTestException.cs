@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace TripServiceKata.Exception
+namespace TripServiceKata
 {
     [Serializable]
-    public class DependendClassCallDuringUnitTestException : System.Exception
+    public class DependendClassCallDuringUnitTestException : Exception
     {
         public DependendClassCallDuringUnitTestException() { }
 
-        public DependendClassCallDuringUnitTestException(string message, System.Exception innerException) : base(message, innerException) { }
+        public DependendClassCallDuringUnitTestException(string message, Exception innerException) : base(message, innerException) { }
 
         public DependendClassCallDuringUnitTestException(string message) : base(message) { }
 
