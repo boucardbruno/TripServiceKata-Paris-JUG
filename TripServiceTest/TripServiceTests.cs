@@ -9,9 +9,12 @@ namespace TripServiceTest
         [Test, ExpectedException(typeof(UserNotLoggedInException))]
         public void Should_raise_exception_when_no_user_logged()
         {
-            var tripService = new TestableTripService();
-            tripService.GetTripsByUser(null);
+            var tripService = new TestableTripService {LoggedUser = NotLoggedUser};
+            tripService.GetTripsByUser(GuestUser);
         }
+
+        public User GuestUser { get; } = null;
+        public User NotLoggedUser { get; } = null;
     }
 
     public class TestableTripService : TripService
