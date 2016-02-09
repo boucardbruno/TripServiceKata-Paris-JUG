@@ -10,7 +10,8 @@ namespace TripServiceKata
         {
             
         }
-        protected TripService(TripDao tripDao)
+
+        public TripService(TripDao tripDao)
         {
             _tripDao = tripDao;
         }

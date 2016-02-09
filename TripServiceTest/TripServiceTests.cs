@@ -8,6 +8,17 @@ namespace TripServiceTest
 {
     public class TripServiceTests
     {
+        public Trip London { get; } = new Trip();
+
+        public Trip Paris { get; } = new Trip();
+
+        public User NotFriendUser { get; } = new User();
+
+        public User LoggedUser { get; } = new User();
+
+        public User GuestUser { get; } = null;
+        public User NotLoggedUser { get; } = null;
+
         [Test, ExpectedException(typeof(UserNotLoggedInException))]
         public void Should_raise_exception_when_no_user_logged()
         {
@@ -28,29 +39,32 @@ namespace TripServiceTest
         public void 
             Should_return_trips_when_current_user_is_friend_with_logged_user()
         {
-            User friendUser = new User();
-            friendUser.AddFriend(LoggedUser);
-            friendUser.AddTrip(Paris);
-            friendUser.AddTrip(London);
-
-            var tripDao = Substitute.For<TripDao>();
-            tripDao.RetrieveTripsByUser(friendUser).Returns(new List<Trip> {Paris, London});
+            var expectedTrips = new List<Trip> {Paris, London};
+            var friendUser = BuildFriendUser(expectedTrips);
+            var tripDao = MakeFakeTripDao(friendUser, expectedTrips);
 
             var tripService = new TestableTripService(tripDao) { LoggedUser = LoggedUser };
             var tripsByUser = tripService.GetTripsByUser(friendUser);
-            Check.That(tripsByUser).ContainsExactly(new List<Trip> {Paris, London});
+            Check.That(tripsByUser).ContainsExactly(expectedTrips);
         }
 
-        public Trip London { get; } = new Trip();
+        private static TripDao MakeFakeTripDao(User friendUser, List<Trip> expectedTrips)
+        {
+            var tripDao = Substitute.For<TripDao>();
+            tripDao.RetrieveTripsByUser(friendUser).Returns(expectedTrips);
+            return tripDao;
+        }
 
-        public Trip Paris { get; } = new Trip();
-
-        public User NotFriendUser { get; } = new User();
-
-        public User LoggedUser { get; } = new User();
-
-        public User GuestUser { get; } = null;
-        public User NotLoggedUser { get; } = null;
+        private User BuildFriendUser(List<Trip> expectedTrips)
+        {
+            User friendUser = new User();
+            friendUser.AddFriend(LoggedUser);
+            foreach (var trip in expectedTrips)
+            {
+                friendUser.AddTrip(trip);
+            }
+            return friendUser;
+        }
     }
 
     public class TestableTripService : TripService
