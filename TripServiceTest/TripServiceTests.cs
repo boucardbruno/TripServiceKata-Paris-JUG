@@ -16,7 +16,7 @@ namespace TripServiceTest
 
         [Test]
         public void 
-            Should_return_no_trip_when_current_user_is_friend_with_logged_user()
+            Should_return_no_trip_when_current_user_is_not_friend_with_logged_user()
         {
             var tripService = new TestableTripService { LoggedUser = LoggedUser };
             var tripsByUser = tripService.GetTripsByUser(NotFriendUser);
