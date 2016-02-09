@@ -6,7 +6,8 @@ namespace TripServiceKata
     {
         public List<Trip> GetTripsByUser(User user)
         {
-            User loggedUser = UserSession.GetInstance().GetLoggedUser();
+            // Extract & Override Call
+            User loggedUser = GetLoggedUser();
             if (loggedUser == null) throw new UserNotLoggedInException();
 
             bool isFriend = false;
@@ -25,6 +26,11 @@ namespace TripServiceKata
                 tripList = TripDao.FindTripsByUser(user);
             }
             return tripList;
+        }
+
+        protected virtual User GetLoggedUser()
+        {
+            return UserSession.GetInstance().GetLoggedUser();
         }
     }
 }
