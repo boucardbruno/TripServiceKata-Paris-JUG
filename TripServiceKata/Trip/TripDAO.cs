@@ -2,8 +2,13 @@
 
 namespace TripServiceKata
 {
-    public static class TripDao
+    public class TripDao
     {
+        // Introduce Instance Delegator
+        public virtual List<Trip> RetrieveTripsByUser(User user)
+        {
+            return FindTripsByUser(user);
+        }
         public static List<Trip> FindTripsByUser(User user)
         {
             throw new DependendClassCallDuringUnitTestException(
