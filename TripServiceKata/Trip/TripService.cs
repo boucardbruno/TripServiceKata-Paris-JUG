@@ -8,41 +8,25 @@ namespace TripServiceKata
         // Parametrized Contructor
         public TripService() : this(new TripDao())
         {
-            
         }
 
         public TripService(TripDao tripDao)
         {
             _tripDao = tripDao;
         }
-
+        // Parametrized Method
         public List<Trip> GetTripsByUser(User user)
         {
-            // Extract & Override Call
-            User loggedUser = GetLoggedUser();
-            if (loggedUser == null) throw new UserNotLoggedInException();
-
-            bool isFriend = false;
-            foreach (User friend in user.GetFriends())
-            {
-                if (friend.Equals(loggedUser))
-                {
-                    isFriend = true;
-                    break;
-                }
-            }
-
-            List<Trip> tripList = new List<Trip>();
-            if (isFriend)
-            {
-                tripList = _tripDao.RetrieveTripsByUser(user);
-            }
-            return tripList;
+            return GetTripsByUser(user, UserSession.GetInstance().GetLoggedUser());
         }
-
-        protected virtual User GetLoggedUser()
+        public List<Trip> GetTripsByUser(User user, User loggedUser)
         {
-            return UserSession.GetInstance().GetLoggedUser();
+            if (loggedUser.IsNotLogged()) throw new UserNotLoggedInException();
+
+            var isFriend = user.IsFriendWith(loggedUser);
+
+            return isFriend ?
+                _tripDao.RetrieveTripsByUser(user) : new List<Trip>();
         }
     }
 }

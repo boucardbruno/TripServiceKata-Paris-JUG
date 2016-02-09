@@ -46,6 +46,7 @@
     <Compile Include="Trip\Trip.cs" />
     <Compile Include="Trip\TripDAO.cs" />
     <Compile Include="Trip\TripService.cs" />
+    <Compile Include="Trip\UserExtension.cs" />
     <Compile Include="User\User.cs" />
     <Compile Include="User\UserSession.cs" />
   </ItemGroup>

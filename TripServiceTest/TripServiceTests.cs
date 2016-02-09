@@ -22,16 +22,16 @@ namespace TripServiceTest
         [Test, ExpectedException(typeof(UserNotLoggedInException))]
         public void Should_raise_exception_when_no_user_logged()
         {
-            var tripService = new TestableTripService {LoggedUser = NotLoggedUser};
-            tripService.GetTripsByUser(GuestUser);
+            var tripService = new TripService();
+            tripService.GetTripsByUser(GuestUser, NotLoggedUser);
         }
 
         [Test]
         public void 
             Should_return_no_trip_when_current_user_is_not_friend_with_logged_user()
         {
-            var tripService = new TestableTripService { LoggedUser = LoggedUser };
-            var tripsByUser = tripService.GetTripsByUser(NotFriendUser);
+            var tripService = new TripService();
+            var tripsByUser = tripService.GetTripsByUser(NotFriendUser, LoggedUser);
             Check.That(tripsByUser).IsEmpty();
         }
 
@@ -43,8 +43,8 @@ namespace TripServiceTest
             var friendUser = BuildFriendUser(expectedTrips);
             var tripDao = MakeFakeTripDao(friendUser, expectedTrips);
 
-            var tripService = new TestableTripService(tripDao) { LoggedUser = LoggedUser };
-            var tripsByUser = tripService.GetTripsByUser(friendUser);
+            var tripService = new TripService(tripDao);
+            var tripsByUser = tripService.GetTripsByUser(friendUser, LoggedUser);
             Check.That(tripsByUser).ContainsExactly(expectedTrips);
         }
 
@@ -65,23 +65,5 @@ namespace TripServiceTest
             }
             return friendUser;
         }
-    }
-
-    public class TestableTripService : TripService
-    {
-        public TestableTripService()
-        {
-            
-        }
-        public TestableTripService(TripDao tripDao):base(tripDao)
-        {
-        }
-
-        protected override User GetLoggedUser()
-        {
-            return LoggedUser;
-        }
-
-        public User LoggedUser { get; set; }
     }
 }
